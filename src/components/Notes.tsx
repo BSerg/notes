@@ -23,7 +23,7 @@ export const Notes = () => {
     const [modalType, setModalType] = useState<'open' | 'edit'>();
 
     const noteList = useMemo(() => {
-        const result = notes.sort((n1, n2) => (n1.createdAt >= n2.createdAt ? 1 : -1));
+        const result = notes.sort((n1, n2) => n1.title.localeCompare(n2.title));
         if (searchQuery?.length) {
             return result.filter((note) => note.isFiltered(searchQuery));
         }
