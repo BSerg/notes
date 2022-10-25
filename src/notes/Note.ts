@@ -51,6 +51,10 @@ export class Note extends Serializable implements INote {
         );
     }
 
+    isFiltered(query: string): boolean {
+        return this.title.includes(query) || !!this.text?.includes(query);
+    }
+
     toObject(): INote {
         return Object.assign({}, this) as INote;
     }

@@ -17,14 +17,18 @@ const AddButton = styled(Fab)`
 `;
 
 export const Notes = () => {
-    const [{user, notes}, dispatch] = useAppState();
+    const [{notes, searchQuery}] = useAppState();
     const [route, setRoute] = useAppNavigation();
     const [openedNote, setOpenedNote] = useState<Note>();
     const [modalType, setModalType] = useState<'open' | 'edit'>();
 
-    const userNotes = useMemo(() => {
-        return notes.sort((n1, n2) => (n1.createdAt >= n2.createdAt ? 1 : -1));
-    }, [notes]);
+    const noteList = useMemo(() => {
+        const result = notes.sort((n1, n2) => (n1.createdAt >= n2.createdAt ? 1 : -1));
+        if (searchQuery?.length) {
+            return result.filter((note) => note.isFiltered(searchQuery));
+        }
+        return result;
+    }, [notes, searchQuery]);
 
     useEffect(() => {
         if (/^\/note\/new$/.test(route)) {
@@ -68,7 +72,7 @@ export const Notes = () => {
                 container
                 spacing={{xs: 2, md: 3}}
                 columns={{xs: 4, sm: 8, md: 12}}>
-                {userNotes.map((note) => (
+                {noteList.map((note) => (
                     <Grid item xs={4} key={note.id}>
                         <NotePreview
                             note={note}

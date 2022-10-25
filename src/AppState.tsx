@@ -14,6 +14,7 @@ import {getUUID} from './utils';
 
 interface IAppState {
     error?: string;
+    searchQuery?: string;
     initialized: boolean;
     user: User | null;
     users: User[];
@@ -23,6 +24,7 @@ interface IAppState {
 type TDispatchType =
     | 'init'
     | 'resetError'
+    | 'searchQuery'
     | 'setUsers'
     | 'setNotes'
     | 'signUp'
@@ -59,6 +61,11 @@ const reducer = (state: IAppState, action: TDispatchAction) => {
             return {
                 ...state,
                 error: null,
+            };
+        case 'searchQuery':
+            return {
+                ...state,
+                searchQuery: action.payload,
             };
         case 'setUsers':
             return {...state, users: action.payload};
